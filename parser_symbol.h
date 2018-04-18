@@ -13,6 +13,9 @@
 using std::set;
 class symbol;
 class token;
+/**
+ * class representing symbol with first and follow set
+ */
 class parser_symbol :symbol {
 private:
     set <token> first,follow;
@@ -20,6 +23,11 @@ private:
 protected:
 
 public:
+    /**
+     * constructor creating the symbol with first and follow sets
+     * @param first set<token> representing first set
+     * @param follow  set<token> representing follow set
+     */
     parser_symbol(symbol*,set<token> first,set<token> follow);
     set<token> get_first_set();
     set<token> get_follow_set();

@@ -9,17 +9,21 @@
 
 using std::string;
 
-class file_parser;
-class grammar_validator;
-
+/**
+ * class representing general symbol (terminals and non terminals)
+ */
 class symbol {
-    friend file_parser;
-    friend   grammar_validator;
+    friend class file_parser;
+    friend  class grammar_validator;
 public:
+    /**
+     * class equating symbols
+     * @return true iff the 2 symbols have the same name
+     */
     virtual bool operator==(const symbol &);       // to compare symbols
 
 protected :
-    virtual symbol(string) = 0;       // check it
+    virtual explicit symbol(string) = 0;       // check it
     string symbol_name;
 };
 

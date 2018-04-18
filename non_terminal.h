@@ -13,16 +13,24 @@ using std::string;
 
 class production;
 
+/**
+ * class represents token
+ */
 class token {
 public:
     const static token eps = token(string("epsilon"));
 
+    /**
+     * constructor taking token name
+     * @param s token name (ex: "id","num",")")
+     */
     token(string s) {
         name = s;
     }
 
     string name;
 };
+
 
 class terminal : symbol {
 public:
