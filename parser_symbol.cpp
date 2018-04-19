@@ -6,7 +6,7 @@
 #include "symbol.h"
 
 parser_symbol::parser_symbol(symbol *sym, set<token> first,
-                             set<token> follow) : symbol(sym->symbol_name) {
+                             set<token> follow) : symbol(sym->get_name()) {
     this->first = first;
     this->follow = follow;
     this->symb = sym;

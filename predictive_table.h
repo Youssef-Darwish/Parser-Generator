@@ -17,6 +17,6 @@ class predictive_table {
          * gets production from state and token
          * @return production
          */
-        production get(parser_symbol,token);
+        production get(parser_symbol*,token);
 };
 #endif //PARSER_GENERATOR_PREDICTIVE_TABLE_H

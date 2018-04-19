@@ -21,11 +21,31 @@ public:
      * @return true iff the 2 symbols have the same name
      */
     virtual bool operator==(const symbol &);       // to compare symbols
-
+    string get_name(); //
 protected :
-    virtual explicit symbol(string) = 0;       // check it
+    symbol(string);       // check it
     string symbol_name;
 };
+
+
+/**
+ * class represents token
+ */
+class token {
+public:
+    const static token eps;// = token(string("epsilon"));
+
+    /**
+     * constructor taking token name
+     * @param s token name (ex: "id","num",")")
+     */
+    token(string s) {
+        name = s;
+    }
+
+    string name;
+};
+
 
 
 #endif //PARSER_GENERATOR_SYMBOL_H

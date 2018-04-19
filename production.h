@@ -18,14 +18,17 @@ class symbol;
 class production{
 
 public:
-private:
-    vector<symbol*> symbol_list;
-};
+production(){
 
+}
 /**
  * operator equating 2 productins
  * @return true iff the 2 symbol sequences are identical
  *          assuming symbols are represented by their references
  */
-bool operator ==(const production&, const production &);
+    bool operator ==( const production &);
+private:
+    vector<symbol*> symbol_list;
+};
+
 #endif //PARSER_GENERATOR_PRODUCTION_H

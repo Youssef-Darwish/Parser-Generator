@@ -10,8 +10,8 @@
 #define PARSER_GENERATOR_PARSER_SYMBOL_H
 
 #include "set"
+#include "symbol.h"
 using std::set;
-class symbol;
 class token;
 /**
  * class representing symbol with first and follow set
