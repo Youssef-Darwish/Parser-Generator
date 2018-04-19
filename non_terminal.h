@@ -21,11 +21,18 @@ public:
     void add_production(production);
 
     vector<production> get_productions();
+#ifdef debug_mode
+non_terminal(string);
+
+    vector<production> production_list;
+#endif
 
 private:
+#ifndef debug_mode
     non_terminal(string);
 
     vector<production> production_list;
+#endif
 };
 
 #endif //PARSER_GENERATOR_NON_TERMINAL_H

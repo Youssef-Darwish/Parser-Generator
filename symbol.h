@@ -22,9 +22,16 @@ public:
      */
     virtual bool operator==(const symbol &);       // to compare symbols
     string get_name(); //
-protected :
+
+#ifdef debug_mode
     symbol(string);       // check it
     string symbol_name;
+#endif
+protected :
+#ifndef debug_mode
+    symbol(string);       // check it
+    string symbol_name;
+#endif
 };
 
 

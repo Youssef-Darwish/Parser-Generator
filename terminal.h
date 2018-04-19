@@ -9,11 +9,18 @@
 class terminal : symbol {
 public:
     const static terminal epsilon; /// TODO define it in file parser;
-private:
-
+#ifdef debug_mode
     token terminal_name = token::eps;
 
     terminal(token t);
+#endif
+private:
+#ifndef debug_mode
+    token terminal_name = token::eps;
+
+    terminal(token t);
+
+#endif
 };
 
 #endif //PARSER_GENERATOR_TERMINAL_H

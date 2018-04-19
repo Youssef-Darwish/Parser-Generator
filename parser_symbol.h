@@ -18,8 +18,10 @@ class token;
  */
 class parser_symbol :symbol {
 private:
+#ifndef debug_mode
     set <token> first,follow;
     symbol * symb;
+#endif
 protected:
 
 public:
@@ -32,6 +34,10 @@ public:
     set<token> get_first_set();
     set<token> get_follow_set();
 
+#ifdef debug_mode
+    set <token> first,follow;
+    symbol * symb;
+#endif
 };
 
 #endif //PARSER_GENERATOR_PARSER_SYMBOL_H
