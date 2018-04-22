@@ -18,6 +18,13 @@ class symbol;
 class production{
 
 public:
+    symbol * get_symbol(int index){
+        return symbol_list[index];
+    }
+    int get_symbol_list_size(){
+        return (int)symbol_list.size();
+    }
+
 production(){
 
 }

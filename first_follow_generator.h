@@ -7,9 +7,11 @@
 
 #include "set"
 #include "vector"
+#include "map"
 
 using std::set;
 using std::vector;
+using std::map;
 
 class symbol;
 
@@ -25,19 +27,31 @@ class first_follow_generator {
 
 public:
 
-    first_follow_generator(vector<symbol *>);
+    first_follow_generator(vector<non_terminal *>);
 
     vector<parser_symbol> get_parser_symbols();
+
+    void start_first_calculations();
+
+    void start_follow_calculations();
+
 
 private:
     set<token> get_first(non_terminal *);
 
+
     void init();
+
 
     bool visited[];
 
+    map<non_terminal *, set<token> *> first_set_map;
+    map<non_terminal *, set<token> *> follow_set_map;
+
+
     set<token> get_follow(non_terminal *);
 
+    vector<non_terminal *> non_terminals_received;
     vector<parser_symbol> parser_syms;
 };
 
