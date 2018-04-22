@@ -14,5 +14,4 @@ terminal::terminal(token t) :symbol(t.name) {
 
 bool production::operator ==( const production &b) { // move to production.cpp
     return  this->symbol_list == b.symbol_list;
-    return  this->symbol_list == b.symbol_list;
 }
