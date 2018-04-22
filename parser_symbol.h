@@ -18,8 +18,11 @@ class token;
  */
 class parser_symbol :symbol {
 private:
+#ifndef debug_mode
     set <token> first,follow;
     symbol * symb;
+#endif
+
 protected:
 
 public:
@@ -28,6 +31,11 @@ public:
      * @param first set<token> representing first set
      * @param follow  set<token> representing follow set
      */
+
+#ifdef debug_mode
+    set <token> first,follow;
+    symbol * symb;
+#endif
     parser_symbol(symbol*,set<token> first,set<token> follow);
     set<token> get_first_set();
     set<token> get_follow_set();

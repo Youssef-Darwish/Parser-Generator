@@ -26,6 +26,11 @@ class non_terminal;
 class first_follow_generator {
 
 public:
+#ifdef debug_mode
+    map<non_terminal *, set<token> *> first_set_map;
+    map<non_terminal *, set<token> *> follow_set_map;
+
+#endif
 
     first_follow_generator(vector<non_terminal *>);
 
@@ -37,20 +42,17 @@ public:
 
 
 private:
-    set<token> get_first(non_terminal *);
 
-
-    void init();
-
-
-    bool visited[];
-
+#ifndef debug_mode
     map<non_terminal *, set<token> *> first_set_map;
     map<non_terminal *, set<token> *> follow_set_map;
+#endif
 
-
+    set<token> get_first(non_terminal *);
+    void init();
+    bool *visited;
     set<token> get_follow(non_terminal *);
-
+    int function_calls=0;
     vector<non_terminal *> non_terminals_received;
     vector<parser_symbol> parser_syms;
 };

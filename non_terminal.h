@@ -15,15 +15,28 @@ class production;
 
 
 
-class non_terminal : symbol {
+class non_terminal : public symbol {
 
 public:
+
+#ifdef debug_mode
+
+    non_terminal(string);
+
+#endif
+
     void add_production(production);
 
     vector<production> get_productions();
 
 private:
+
+
+#ifndef debug_mode
+
     non_terminal(string);
+#endif
+
 
     vector<production> production_list;
 };

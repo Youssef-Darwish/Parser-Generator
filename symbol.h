@@ -16,15 +16,22 @@ class symbol {
     friend class file_parser;
     friend  class grammar_validator;
 public:
+#ifdef debug_mode
+    string symbol_name;
+#endif
+
     /**
      * class equating symbols
      * @return true iff the 2 symbols have the same name
      */
     virtual bool operator==(const symbol &);       // to compare symbols
     string get_name(); //
+
 protected :
-    symbol(string);       // check it
+#ifndef debug_mode
     string symbol_name;
+#endif
+    symbol(string);       // check it
 };
 
 
@@ -43,6 +50,7 @@ public:
         name = s;
     }
 
+    bool operator < (const token &) const;
     string name;
 };
 
