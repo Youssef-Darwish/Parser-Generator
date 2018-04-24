@@ -40,6 +40,9 @@ public:
 
     void start_follow_calculations();
 
+    void print();
+
+
 
 private:
 
@@ -51,10 +54,11 @@ private:
     set<token> get_first(non_terminal *);
     void init();
     bool *visited;
-    set<token> get_follow(non_terminal *);
+    void  add_in_follow(non_terminal *, set<token > *);
     int function_calls=0;
     vector<non_terminal *> non_terminals_received;
     vector<parser_symbol> parser_syms;
+    set<non_terminal *> visited_symbols;
 };
 
 #endif //PARSER_GENERATOR_FIRST_FOLLOW_GENERATOR_H

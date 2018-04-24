@@ -16,8 +16,6 @@ int main() {
 
     non_terminal *E = new non_terminal("E");
 
-    std::cout << (eps==token("epsilon")) <<eps.name<<std::endl;
-    std::cout << terminal::epsilon.symbol_name<<"..."<<std::endl;
     non_terminal *E_dash = new non_terminal("E`");
     non_terminal *T = new non_terminal("T");
     non_terminal *T_dash = new non_terminal("T`");
@@ -56,9 +54,6 @@ int main() {
 
     prod->symbol_list.clear();
 
-    prod->symbol_list.push_back((symbol*)eps);
-    T->add_production(*prod);
-    prod->symbol_list.clear();
 
     prod->symbol_list.push_back((symbol *) asterisk);
     prod->symbol_list.push_back((symbol *) F);
@@ -92,7 +87,7 @@ int main() {
     first_follow_generator *generator = new first_follow_generator(rec);
 //
     generator->start_first_calculations();
-
-
+    generator->start_follow_calculations();
+    generator->print();
     return 0;
 }

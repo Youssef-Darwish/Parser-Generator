@@ -28,12 +28,6 @@ void first_follow_generator::start_first_calculations() {
     }
 }
 
-void first_follow_generator::start_follow_calculations() {
-
-    for (int i = 0; i < non_terminals_received.size(); i++) {
-
-    }
-}
 
 set<token> first_follow_generator::get_first(non_terminal *sym) {
     non_terminal *current = sym;
@@ -50,7 +44,7 @@ set<token> first_follow_generator::get_first(non_terminal *sym) {
 
         if (dynamic_cast<non_terminal *>(next) == NULL) {
             first_set->insert(token(next->get_name()));
-            std::cout<< "terminal in "<< current->get_name() <<" "<<next->get_name()<<std::endl;
+//            std::cout << "terminal in " << current->get_name() << " " << next->get_name() << std::endl;
             continue;
         }
             // symbol is non-terminal, find its first set
@@ -67,8 +61,8 @@ set<token> first_follow_generator::get_first(non_terminal *sym) {
                 // If epsilon is found in non-terminal first set,add all terminals except epsilon
                 // iterate through next non-terminals to add first sets
             else {
-                std::cout<<"next : " <<next->get_name() <<std::endl;
-                std::cout<<"current : " <<current->get_name() <<std::endl;
+                std::cout << "next : " << next->get_name() << std::endl;
+                std::cout << "current : " << current->get_name() << std::endl;
                 // add all for now & remove epsilon later
                 bool insert_epsilon = false;
                 bool has_epsilon = true;
@@ -79,7 +73,7 @@ set<token> first_follow_generator::get_first(non_terminal *sym) {
                     symbol *next_sym = current->get_productions()[i].get_symbol(j);
                     if (dynamic_cast<terminal *>(next_sym)) {
                         has_epsilon = next_sym->get_name() == "epsilon";  //TODO make it more clean
-                        std::cout<<"passed" <<std::endl;
+                        std::cout << "passed" << std::endl;
                         first_set->insert(next_sym->get_name());
                     } else {
                         set<token> inner = get_first((non_terminal *) next_sym);
@@ -102,47 +96,113 @@ set<token> first_follow_generator::get_first(non_terminal *sym) {
 
 
     first_set_map[sym] = first_set;
-    std::cout << "Symbol  " << sym->get_name() << std::endl;
-    std::cout << "its first set : " <<  std::endl;
-    for (auto f : *first_set) {
-        std::cout << f.name << " ";
-    }
-    std::cout << std::endl;
+//    std::cout << "Symbol  " << sym->get_name() << std::endl;
+//    std::cout << "its first set : " << std::endl;
+//    for (auto f : *first_set) {
+//        std::cout << f.name << " ";
+//    }
+//    std::cout << std::endl;
     return *first_set;
 
 }
 
+int X = 0;
 
-set<token> first_follow_generator::get_follow(non_terminal *sym) {
+void first_follow_generator::start_follow_calculations() {
 
-    if (follow_set_map.count(sym)) {
-        return *follow_set_map[sym];
-    }
+//    token start = token("$");
+//    set<token> temp ;
+//    temp.insert(start);
+//    follow_set_map.insert(non_terminals_received[0],temp);
 
-    non_terminal *current = sym;
-    set<token> follow_set;
+    for (int i = 0; i < non_terminals_received.size(); i++) {
 
-    for (int i = 0; i < current->get_productions().size()-1; i++) {
-
-        symbol *next = current->get_productions()[i].get_symbol(0);
-    }
-
-        // make a function called: copy_set_except_epsilon xD
-
-    // call bardo from outer function?
+        non_terminal *sym = non_terminals_received[i];
+        int sz = sym->get_productions().size();
+        for (int i = 0; i < sz; i++) {
+            int size = sym->get_productions()[i].get_symbol_list_size();
 
 
-    for (int i = 0; i < current->get_productions().size(); i++) {
-        symbol *next = current->get_productions()[i].get_symbol(0);
-        if (dynamic_cast<terminal *>(next)) {
-            continue;
+            for (int j = size - 1; j > 0; j--) {
+                symbol *current = sym->get_productions()[i].get_symbol(j - 1);
+//            std::cout << "symbol name in outer loop : " << current->get_name() <<std::endl;
+                // add first of j in follow of j-1 (symbol, first set)
+                if (dynamic_cast<non_terminal *> (sym->get_productions()[i].get_symbol(j)))
+
+                    if (dynamic_cast<non_terminal *> (current)) {
+                    add_in_follow((non_terminal *) current,
+                                  first_set_map[(non_terminal *) sym->get_productions()[i].get_symbol(j)]);
+
+                }
+
+
+            }
+
         }
+    }
+}
 
+void first_follow_generator::add_in_follow(non_terminal *sym, set<token> *tok) {
+
+    if (visited_symbols.count(sym) != 0)
+        return;
+    visited_symbols.insert(sym);
+
+//    std::cout << tok->size() << std::endl;
+
+    // follow[sym] . insert (passed set)
+    // if terminal : add and return -------------> when symbol is used instead of non_terminal
+
+    if (!follow_set_map.count(sym)) {
+        follow_set_map[sym] = new set<token>();
+    }
+    follow_set_map[sym]->insert(tok->begin(), tok->end());
+//    std::cout << "inserted in : " << sym->get_name() <<std::endl;
+//
+//    for (auto f : *tok) {
+//        std::cout << f.name << " ";
+//    }
+//    std::cout << std::endl;
+
+
+
+//    std::cout << "pass" << std::endl;
+
+    for (int i = 0; i < sym->get_productions().size(); i++) {
+        int size = sym->get_productions()[i].get_symbol_list_size();
+        bool cont;
+
+        do {
+            cont = false;
+            symbol *curr = sym->get_productions()[i].get_symbol(size - 1);
+            if (dynamic_cast<non_terminal *>(curr)) {
+                add_in_follow(dynamic_cast<non_terminal *>(curr), tok);
+                if (first_set_map[dynamic_cast<non_terminal *>(curr)]->count(eps)) {
+
+                    cont = true;
+                }
+
+            }
+            size--;
+        } while (cont && size >= 0);
     }
 
-
+    visited_symbols.erase(sym);
 }
 
 vector<parser_symbol> first_follow_generator::get_parser_symbols() {
+
     return parser_syms;
 }
+
+void first_follow_generator::print() {
+    for (auto f : follow_set_map) {
+        std::cout << "non-terminal :  " << f.first->get_name() << std::endl;
+        for (auto g : *f.second) {
+            std::cout << g.name << "  ";
+        }
+        std::cout << std::endl;
+    }
+    std::cout << std::endl;
+
+};
