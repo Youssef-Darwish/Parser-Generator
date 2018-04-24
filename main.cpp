@@ -9,14 +9,15 @@
 #include "first_follow_generator.h"
 
 #ifdef debug_mode
-const terminal terminal::epsilon = terminal(token::eps);
+const terminal terminal::epsilon = terminal(eps);
 #endif
 
 int main() {
 
     non_terminal *E = new non_terminal("E");
 
-    std::cout << E->symbol_name;
+    std::cout << (eps==token("epsilon")) <<eps.name<<std::endl;
+    std::cout << terminal::epsilon.symbol_name<<"..."<<std::endl;
     non_terminal *E_dash = new non_terminal("E`");
     non_terminal *T = new non_terminal("T");
     non_terminal *T_dash = new non_terminal("T`");
@@ -28,54 +29,59 @@ int main() {
     terminal *id = new terminal(token("id"));
     terminal *open_brack = new terminal(token("("));
     terminal *close_brack = new terminal(token(")"));
+    const terminal * eps = &terminal::epsilon;
 
     prod->symbol_list.push_back((symbol *) T);
 //
-    prod->symbol_list.push_back((symbol*)E_dash);
+    prod->symbol_list.push_back((symbol *) E_dash);
     E->add_production(*prod);
     prod->symbol_list.clear();
     production *prod1 = new production();
-    prod1->symbol_list.push_back((symbol*)plus);
-    prod1->symbol_list.push_back((symbol*)T);
-    prod1->symbol_list.push_back((symbol*)E_dash);
+    prod1->symbol_list.push_back((symbol *) plus);
+    prod1->symbol_list.push_back((symbol *) T);
+    prod1->symbol_list.push_back((symbol *) E_dash);
     E_dash->add_production(*prod1);
 
     prod->symbol_list.clear();
-    prod->symbol_list.push_back((symbol*) &terminal::epsilon);
+    prod->symbol_list.push_back((symbol *) eps);
 
     E_dash->add_production(*prod);
 
     prod->symbol_list.clear();
-    prod->symbol_list.push_back((symbol*)F);
-    prod->symbol_list.push_back((symbol*)T_dash);
+    prod->symbol_list.push_back((symbol *) F);
+    prod->symbol_list.push_back((symbol *) T_dash);
 
     T->add_production(*prod);
 
+
     prod->symbol_list.clear();
 
-    prod->symbol_list.push_back((symbol*)asterisk);
-    prod->symbol_list.push_back((symbol*)F);
-    prod->symbol_list.push_back((symbol*)T_dash);
+    prod->symbol_list.push_back((symbol*)eps);
+    T->add_production(*prod);
+    prod->symbol_list.clear();
+
+    prod->symbol_list.push_back((symbol *) asterisk);
+    prod->symbol_list.push_back((symbol *) F);
+    prod->symbol_list.push_back((symbol *) T_dash);
 
     T_dash->add_production(*prod);
     prod->symbol_list.clear();
 
-    prod->symbol_list.push_back((symbol*)&terminal::epsilon);
+    prod->symbol_list.push_back((symbol *) eps);
 
     T_dash->add_production(*prod);
 
     prod->symbol_list.clear();
 
-    prod->symbol_list.push_back((symbol*)open_brack);
-    prod->symbol_list.push_back((symbol*)E);
-    prod->symbol_list.push_back((symbol*)close_brack);
+    prod->symbol_list.push_back((symbol *) open_brack);
+    prod->symbol_list.push_back((symbol *) E);
+    prod->symbol_list.push_back((symbol *) close_brack);
 
     F->add_production(*prod);
     prod->symbol_list.clear();
-    prod->symbol_list.push_back((symbol *)id);
+    prod->symbol_list.push_back((symbol *) id);
     F->add_production(*prod);
 
-//
     vector<non_terminal *> rec;
     rec.push_back(E);
     rec.push_back(E_dash);

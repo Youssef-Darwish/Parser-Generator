@@ -34,13 +34,12 @@ protected :
     symbol(string);       // check it
 };
 
-
 /**
  * class represents token
  */
 class token {
 public:
-    const static token eps;// = token(string("epsilon"));
+    //const static token eps;// = token(string("epsilon"));
 
     /**
      * constructor taking token name
@@ -51,9 +50,11 @@ public:
     }
 
     bool operator < (const token &) const;
+    bool operator == (const token &) const;
     string name;
 };
 
 
+const static token eps("epsilon");
 
 #endif //PARSER_GENERATOR_SYMBOL_H

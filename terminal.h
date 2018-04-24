@@ -6,7 +6,7 @@
 #define PARSER_GENERATOR_TERMINAL_H
 #include "symbol.h"
 
-class terminal : symbol {
+class terminal :public  symbol {
 public:
 #ifdef debug_mode
 
@@ -23,7 +23,7 @@ private:
 
 #endif
 
-    token terminal_name = token::eps;
+    token terminal_name = eps;
 
 };
 
