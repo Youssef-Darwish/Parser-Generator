@@ -27,5 +27,4 @@ set<token> *first_follow_wrapper::get_follow(non_terminal *sym) {
     } else {
         return new set<token>();
     }
-
 }
