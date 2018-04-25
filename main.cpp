@@ -7,6 +7,7 @@
 #include "production.h"
 #include "terminal.h"
 #include "first_follow_generator.h"
+#include "first_follow_wrapper.h"
 
 #ifdef debug_mode
 const terminal terminal::epsilon = terminal(eps);
@@ -90,6 +91,15 @@ int main() {
 //
     generator->start_first_calculations();
     generator->start_follow_calculations();
-    generator->print();
+    //generator->print();
+
+    first_follow_wrapper * wrap = generator->get_wrapper();
+    set<token> * from_wrapper = wrap->get_follow(E_dash);
+
+    for( auto i :*from_wrapper){
+        std::cout<<i.name << " " ;
+    }
+
+
     return 0;
 }

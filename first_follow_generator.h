@@ -14,7 +14,7 @@ using std::vector;
 using std::map;
 
 class symbol;
-
+class first_follow_wrapper;
 class token;
 
 class production;
@@ -34,8 +34,7 @@ public:
 
     first_follow_generator(vector<non_terminal *>);
 
-    vector<parser_symbol> get_parser_symbols();
-
+    first_follow_wrapper * get_wrapper();
     void start_first_calculations();
 
     void start_follow_calculations();
