@@ -25,7 +25,9 @@ public:
      * @return true iff the 2 symbols have the same name
      */
     virtual bool operator==(const symbol &);       // to compare symbols
-    string get_name(); //
+    string get_name();
+
+
 
 protected :
 #ifndef debug_mode

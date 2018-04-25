@@ -31,6 +31,9 @@ public:
     int get_symbol_list_size() {
         return (int) symbol_list.size();
     }
+    vector<symbol *> get_symbol_list(){
+        return symbol_list;
+    }
 
     production() {
 

@@ -14,6 +14,21 @@ first_follow_generator::first_follow_generator(vector<non_terminal *> non_ter) {
 
     non_terminals_received = non_ter;
     visited = (bool *) malloc(non_ter.size() * sizeof(bool));
+    init();
+}
+
+void first_follow_generator::init() {
+    for (auto f : non_terminals_received) {
+        for (auto g : f->get_productions()) {
+            for (auto h : g.get_symbol_list()) {
+                if (is_terminal(h)) {
+                    auto *term_token = new set<token>;
+                    term_token->insert(h->get_name());
+                    first_set_map[h] = term_token;
+                }
+            }
+        }
+    }
 }
 
 void first_follow_generator::start_first_calculations() {
@@ -22,27 +37,41 @@ void first_follow_generator::start_first_calculations() {
 
         if (first_set_map.count(non_terminals_received[i]) == 0) {
             get_first(non_terminals_received[i]);
-        } else {
-
         }
     }
+//    for (auto f : first_set_map) {
+//        std::cout << "Symbol :  " << f.first->get_name() << std::endl;
+//        for (auto g : *f.second) {
+//            std::cout << g.name << "  ";
+//        }
+//        std::cout << std::endl;
+//    }
+//    std::cout << "end of first set print " << std::endl << std::endl;
 }
 
 
-set<token> first_follow_generator::get_first(non_terminal *sym) {
-    non_terminal *current = sym;
-    set<token> *first_set = new set<token>;
+set<token> first_follow_generator::get_first(symbol *sym) {
+
+//    if (is_terminal(sym)){
+//        std::cout<<"terminal" <<std::endl;
+//    }
+
+
+    auto *current = dynamic_cast<non_terminal *>(sym);
+
+    auto *first_set = new set<token>;
+
     function_calls++;
 //    std::cout << function_calls << std::endl;
     for (int i = 0; i < current->get_productions().size(); i++) {
         // get first symbol in the production
         symbol *next = current->get_productions()[i].get_symbol(0);
-
 //        std::cout<<"name  " <<next->get_name() <<std::endl;
-
         // symbol is terminal, just add it to first set
-
         if (dynamic_cast<non_terminal *>(next) == NULL) {
+            auto *term_token = new set<token>;
+            term_token->insert(next->get_name());
+            first_set_map[next] = term_token;
             first_set->insert(token(next->get_name()));
 //            std::cout << "terminal in " << current->get_name() << " " << next->get_name() << std::endl;
             continue;
@@ -106,14 +135,12 @@ set<token> first_follow_generator::get_first(non_terminal *sym) {
 
 }
 
-int X = 0;
-
 void first_follow_generator::start_follow_calculations() {
 
-//    token start = token("$");
-//    set<token> temp ;
-//    temp.insert(start);
-//    follow_set_map.insert(non_terminals_received[0],temp);
+    token start = token("$");
+    auto *temp = new set<token>;
+    temp->insert(start);
+    follow_set_map[non_terminals_received[0]] = temp;
 
     for (int i = 0; i < non_terminals_received.size(); i++) {
 
@@ -121,23 +148,19 @@ void first_follow_generator::start_follow_calculations() {
         int sz = sym->get_productions().size();
         for (int i = 0; i < sz; i++) {
             int size = sym->get_productions()[i].get_symbol_list_size();
-
-
             for (int j = size - 1; j > 0; j--) {
                 symbol *current = sym->get_productions()[i].get_symbol(j - 1);
 //            std::cout << "symbol name in outer loop : " << current->get_name() <<std::endl;
                 // add first of j in follow of j-1 (symbol, first set)
-                if (dynamic_cast<non_terminal *> (sym->get_productions()[i].get_symbol(j)))
-
-                    if (dynamic_cast<non_terminal *> (current)) {
-                    add_in_follow((non_terminal *) current,
-                                  first_set_map[(non_terminal *) sym->get_productions()[i].get_symbol(j)]);
-
-                }
-
-
+//                if (!is_terminal (sym->get_productions()[i].get_symbol(j))) {
+                    if (!is_terminal (current)) {
+//                        std::cout<<"in follow : " << current->get_name() <<std::endl;
+//                        std::cout<<" : " << sym->get_productions()[i].get_symbol(j)->get_name()<<std::endl;
+                        add_in_follow((non_terminal *) current,
+                                      first_set_map[sym->get_productions()[i].get_symbol(j)]);
+                    }
+//                }
             }
-
         }
     }
 }
@@ -148,25 +171,13 @@ void first_follow_generator::add_in_follow(non_terminal *sym, set<token> *tok) {
         return;
     visited_symbols.insert(sym);
 
-//    std::cout << tok->size() << std::endl;
-
-    // follow[sym] . insert (passed set)
     // if terminal : add and return -------------> when symbol is used instead of non_terminal
 
     if (!follow_set_map.count(sym)) {
         follow_set_map[sym] = new set<token>();
     }
     follow_set_map[sym]->insert(tok->begin(), tok->end());
-//    std::cout << "inserted in : " << sym->get_name() <<std::endl;
-//
-//    for (auto f : *tok) {
-//        std::cout << f.name << " ";
-//    }
-//    std::cout << std::endl;
 
-
-
-//    std::cout << "pass" << std::endl;
 
     for (int i = 0; i < sym->get_productions().size(); i++) {
         int size = sym->get_productions()[i].get_symbol_list_size();
@@ -205,4 +216,13 @@ void first_follow_generator::print() {
     }
     std::cout << std::endl;
 
-};
+}
+
+bool first_follow_generator::is_terminal(symbol *sym) {
+    for (int i = 0; i < non_terminals_received.size(); i++) {
+        if (non_terminals_received[i] == sym) {
+            return false;
+        }
+    }
+    return true;
+}

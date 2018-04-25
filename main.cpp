@@ -55,6 +55,8 @@ int main() {
     prod->symbol_list.clear();
 
 
+
+
     prod->symbol_list.push_back((symbol *) asterisk);
     prod->symbol_list.push_back((symbol *) F);
     prod->symbol_list.push_back((symbol *) T_dash);
