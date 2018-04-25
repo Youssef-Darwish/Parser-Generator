@@ -5,10 +5,12 @@
 #ifndef PARSER_GENERATOR_PRODUCTION_H
 #define PARSER_GENERATOR_PRODUCTION_H
 
-#include "vector"
-
+#include <vector>
+#include <string>
+#include <iostream>
 using std::vector;
-
+using std::string;
+using std::ostream;
 class symbol;
 /**
  * class representing RHS of 1 single production
@@ -18,17 +20,18 @@ class symbol;
 class production{
 
 public:
-production(){
-
-}
+production();
+production(vector<const symbol*>);
+friend ostream& operator <<(ostream& os, production & p);
 /**
  * operator equating 2 productins
  * @return true iff the 2 symbol sequences are identical
  *          assuming symbols are represented by their references
  */
     bool operator ==( const production &);
+    const vector <const symbol *> *get_symbol_list();
 private:
-    vector<symbol*> symbol_list;
+    vector<const symbol*> symbol_list;
 };
 
 #endif //PARSER_GENERATOR_PRODUCTION_H

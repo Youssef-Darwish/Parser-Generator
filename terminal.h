@@ -5,15 +5,22 @@
 #ifndef PARSER_GENERATOR_TERMINAL_H
 #define PARSER_GENERATOR_TERMINAL_H
 #include "symbol.h"
+class parser;
+class file_parser;
+class terminal : public symbol {
 
-class terminal : symbol {
+protected:
+    friend class file_parser;
+    token terminal_name = eps;
+    terminal(token t) ;
+    void accept( parser *) const override;
 public:
-    const static terminal epsilon; /// TODO define it in file parser;
-private:
 
-    token terminal_name = token::eps;
+    token get_token()const;
 
-    terminal(token t);
+    static const  terminal epsilon;
+      static const terminal end_terminal;
 };
+//const static terminal epsilon ; /// TODO define it in file parser;
 
 #endif //PARSER_GENERATOR_TERMINAL_H
