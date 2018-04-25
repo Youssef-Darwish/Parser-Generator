@@ -6,14 +6,25 @@
 #define PARSER_GENERATOR_TERMINAL_H
 #include "symbol.h"
 
-class terminal : symbol {
+class terminal :public  symbol {
 public:
+#ifdef debug_mode
+
+    terminal(token t);
+
+#endif
+
     const static terminal epsilon; /// TODO define it in file parser;
 private:
 
-    token terminal_name = token::eps;
+#ifndef debug_mode
 
     terminal(token t);
+
+#endif
+
+    token terminal_name = eps;
+
 };
 
 #endif //PARSER_GENERATOR_TERMINAL_H

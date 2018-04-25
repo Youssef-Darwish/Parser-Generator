@@ -4,6 +4,7 @@
 
 #include "non_terminal.h"
 #include "production.h"
+#include "iostream"
 #include "symbol.h"
 #include "terminal.h"
 void non_terminal:: add_production(production prod){
@@ -21,4 +22,5 @@ vector <production> non_terminal::get_productions(){
 
 non_terminal::non_terminal(string name):symbol(name) {
     this->symbol_name = name;
+//    std::cout<<"bla";
 }

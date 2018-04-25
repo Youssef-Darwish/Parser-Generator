@@ -9,6 +9,7 @@
 
 terminal::terminal(token t) :symbol(t.name) {
     terminal_name = t;
+    this->symbol_name = t.name;
 }
 
 
