@@ -126,7 +126,6 @@ bool file_parser::parse_productions(pair<string,substring> prod) {
             const symbol * nsym;
             if(symbol_name == args.epsilon) {
                 nsym = &terminal::epsilon;
-                cout << "parsing epsilon "<<endl;
             }
             else if(non_terminals.count(symbol_name)) {
                 nsym = non_terminals[symbol_name];
@@ -174,10 +173,10 @@ bool file_parser::parse(const string &c) {
     }
     set<non_terminal*> added;
     for (int i = 0 ;i < production_list.size(); i++) {
-        if(added.count(non_terminals[production_list[i].first]))
-            continue;
         if(!parse_productions(production_list[i]))
             return false;
+        if(added.count(non_terminals[production_list[i].first]))
+            continue;
         grammar.push_back(non_terminals[production_list[i].first]);
         added.insert(non_terminals[production_list[i].first]);
     }
@@ -211,9 +210,17 @@ void file_parser::flush() {
     input_size = 0;
 }
 //
-vector<non_terminal *> file_parser::get_grammar() {
+vector<const non_terminal *> file_parser::get_grammar() {
     return  grammar;
 }
+vector<token> file_parser::get_token_set() {
+    vector <token> toret;
+    for(auto i:token_set) {
+        toret.push_back(i);
+    }
+    return  toret;
+}
+
 //
 //set<token> get_token_set();
 //

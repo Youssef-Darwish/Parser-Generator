@@ -6,12 +6,12 @@
 #define PARSER_GENERATOR_PREDICTIVE_TABLE_H
 
 #include <vector>
-#include <unordered_map>
-#include "non_terminal.h"
-#include "wrapper.h"
+#include <map>
+
 using std::vector;
-using std::unordered_map;
+using std::map;
 class token;
+class non_terminal;
 typedef const non_terminal parser_symbol;
 class production;
 enum entry_status {
@@ -19,6 +19,8 @@ enum entry_status {
     ERROR,
     SYNCH
 };
+using  std::ostream;
+class first_follow_wrapper;
 class predictive_table {
     public:
         predictive_table(const vector<token> &,const vector<parser_symbol*>&,  first_follow_wrapper & );
@@ -29,12 +31,13 @@ class predictive_table {
         production get_next_production( parser_symbol*,token);
         const parser_symbol * get_start();
         entry_status  get_entry_status( parser_symbol * , token);
-
+    friend
+    ostream& operator <<( ostream& ,  predictive_table &);
 protected :
     int get_prod(parser_symbol * ,token);
-    unordered_map<parser_symbol * ,int> symb_tab;
+    map<parser_symbol * ,int> symb_tab;
 
-    unordered_map<token ,int> token_tab;
+    map<token ,int> token_tab;
       void construct();
       parser_symbol * start;
      first_follow_wrapper &tab;

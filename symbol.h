@@ -61,5 +61,7 @@ public:
 };
 
 const static  token eps(string("epsilon"));
-\
+
+const static  token end_token(string("$"));
+
 #endif //PARSER_GENERATOR_SYMBOL_H

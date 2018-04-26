@@ -27,11 +27,11 @@ non_terminal::non_terminal(string name) : symbol(name) {
 }
 
 void non_terminal::accept( parser *parser) const {
-    parser->process(const_cast<>(this));
+    parser->process((this));
 }
 
-ostream &operator<<(ostream &os, non_terminal &p) {
-    os << p.symbol_name << "::=";
+ostream &operator<<(ostream &os, const non_terminal &p) {
+    os << p.symbol_name <<"("<<p.production_list.size()<<")"<<"::=";
     for (int i = 0; i < p.production_list.size(); i++) {
         os << p.production_list[i] << "|";
     }

@@ -25,21 +25,18 @@ public:
     vector<symbol *> symbol_list;
 #endif
 
-    symbol *get_symbol(int index) {
+    const symbol *get_symbol(int index) {
         return symbol_list[index];
     }
 
     int get_symbol_list_size() {
         return (int) symbol_list.size();
     }
-    vector<symbol *> get_symbol_list(){
-        return symbol_list;
-    }
-
+    vector<const symbol *> get_symbol_list() const;
 
 production();
 production(vector<const symbol*>);
-friend ostream& operator <<(ostream& os, production & p);
+friend ostream& operator <<(ostream& os,const  production & p);
 /**
  * operator equating 2 productins
  * @return true iff the 2 symbol sequences are identical
@@ -48,7 +45,7 @@ friend ostream& operator <<(ostream& os, production & p);
     bool operator ==( const production &);
 private:
 #ifndef debug_mode
-    vector<symbol *> symbol_list;
+    vector<const symbol *> symbol_list;
 #endif
 
 };

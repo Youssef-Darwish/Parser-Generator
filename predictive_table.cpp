@@ -5,6 +5,7 @@
 #include "production.h"
 #include "terminal.h"
 #include "non_terminal.h"
+#include "wrapper.h"
 #include <vector>
 using std::vector;
 
@@ -37,7 +38,7 @@ void predictive_table::construct() {
             if(tab.get_first(construction_set[i])->count(token_set[j])) {
                 vector < production> allps = construction_set[i]->get_productions();
                 for(int k = 0; k < allps.size() && v <0;k++) {
-                    const symbol * ofst  = allps[k].get_symbol_list()->at(0);
+                    const symbol * ofst  = allps[k].get_symbol_list().at(0);
                     if(tab.get_first(ofst)->count(token_set[j]))
                         v = k;
                 }
@@ -46,7 +47,7 @@ void predictive_table::construct() {
             else if (tab.get_follow(construction_set[i])->count(token_set[j])) {
                 vector < production> allps = construction_set[i]->get_productions();
                 for(int k = 0; k < allps.size() && v <0;k++) {
-                    const symbol *ofst = allps[k].get_symbol_list()->at(0);
+                    const symbol *ofst = allps[k].get_symbol_list().at(0);
                     if (ofst == &terminal::epsilon)
                         v = k;
                 }
@@ -55,7 +56,7 @@ void predictive_table::construct() {
         }
     }
 }
-const parser_symbol * predictive_table::get_start() {
+parser_symbol * predictive_table::get_start() {
     return start;
 }
 
@@ -73,4 +74,25 @@ production predictive_table::get_next_production(const parser_symbol* s ,token t
         return s->get_productions()[val];
     return  production();
 
+}
+
+ostream& operator <<( ostream& os,  predictive_table & tab) {
+        os<<"\t|";
+        for (int i=0;i<tab.token_set.size();i++)
+            os<<tab.token_set[i].name<<"\t|";
+        os<<"\n";
+        for(int i=0;i<tab.construction_set.size();i++) {
+            os<<tab.construction_set[i]->get_name()<<"::\t|";
+            for(int j=0;j<tab.table[i].size();j++) {
+                int err = tab.get_entry_status(tab.construction_set[i],tab.token_set[j]);
+                if(err == VALID) {
+                    os<<tab.construction_set[i]->get_productions()[tab.get_prod(tab.construction_set[i],tab.token_set[j])]<<"\t|";
+                } else if(err == SYNCH)
+                    os<<"SYNCH\t|";
+                else
+                    os<<"ERR\t|";
+            }
+            os<<"\n";
+        }
+    return  os;
 }

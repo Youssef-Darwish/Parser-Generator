@@ -22,9 +22,9 @@ private:
 
     terminal(token t);
 
-#endif
 
     token terminal_name = eps;
+#endif
 
 protected:
     friend class file_parser;

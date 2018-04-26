@@ -9,7 +9,8 @@ production::production(vector<const symbol*>sl){
     this->symbol_list =  sl;
 }
 
-ostream& operator <<( ostream& os, production & p) {
+ostream& operator <<( ostream& os, const production & p) {
+    os<<"("<<p.symbol_list.size()<<")";
     for(int i=0;i<p.symbol_list.size();i++) {
         os<<p.symbol_list[i]->get_name() <<" ";
     }
@@ -18,6 +19,6 @@ ostream& operator <<( ostream& os, production & p) {
 production::production() {
 
 }
-const vector <const symbol *> * production::get_symbol_list() {
-    return &symbol_list;
+vector <const symbol *>  production::get_symbol_list() const {
+    return symbol_list;
 }

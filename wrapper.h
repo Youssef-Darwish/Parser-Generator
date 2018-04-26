@@ -30,13 +30,14 @@ public:
 
     set<token> *get_follow(const symbol *);
 
-    first_follow_wrapper(map<symbol *, set<token> *>,
-                         map<symbol *, set<token> *> follow_set_map);
-
+    first_follow_wrapper(map<const symbol *, set<token> *>,
+                         map<const symbol *, set<token> *> follow_set_map);
+    friend
+    ostream& operator <<( ostream& ,  first_follow_wrapper &);
 private:
 
-    map<symbol *, set<token> *> first_set_map;
-    map<symbol *, set<token> *> follow_set_map;
+    map<const symbol *, set<token> *> first_set_map;
+    map<const symbol *, set<token> *> follow_set_map;
 
 };
 

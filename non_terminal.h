@@ -12,7 +12,7 @@
 
 using std::vector;
 using std::string;
-
+using std::ostream;
 class production;
 
 
@@ -30,7 +30,7 @@ public:
 
     vector<production> get_productions() const ;
 
-    friend ostream &operator<<(ostream &os, non_terminal &p);
+    friend ostream &operator<<(ostream &os, const non_terminal &p);
 
     void accept( parser *) const override;
 

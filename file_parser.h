@@ -41,14 +41,14 @@ protected:
     int input_size;
     bool parse_productions(pair<string,substring> prod);
     bool has_set;
-    vector<non_terminal * > grammar;
+    vector<const non_terminal * > grammar;
 public:
     file_parser(file_parser_arg);
     bool parse(const string  &c);
     bool parse(const string &c,const set<token> &token_set);
     void flush();
-    vector <non_terminal*> get_grammar();
-//    set<token> get_token_set();
+    vector <const non_terminal*> get_grammar();
+    vector<token> get_token_set();
 //    int get_error_();
 
 };
