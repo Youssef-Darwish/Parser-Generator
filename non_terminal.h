@@ -45,10 +45,10 @@ private:
     friend class grammar_validator;
 
     non_terminal(string);
-#endif
 
 
     vector<production> production_list;
+#endif
 };
 
 #endif //PARSER_GENERATOR_NON_TERMINAL_H

@@ -27,9 +27,14 @@ public:
      * @return true iff the 2 symbols have the same name
      */
     virtual bool operator==(const symbol &);       // to compare symbols
-    string get_name() const ; //
-     friend class file_parser;
-    friend  class grammar_validator;
+    string get_name(); //
+         // check it
+
+#ifdef debug_mode
+     symbol(string);
+    string symbol_name;
+#endif
+    string get_name() const ;
 
     /* pure virtual function to serve the parser visitor class */
     virtual void accept( parser *) const= 0;
@@ -38,9 +43,11 @@ public:
 protected :
 #ifndef debug_mode
     string symbol_name;
-#endif
     symbol(string);       // check it
+
+#endif
 };
+
 
 /**
  * class represents token
