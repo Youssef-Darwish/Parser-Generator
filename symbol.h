@@ -5,7 +5,8 @@
 #ifndef PARSER_GENERATOR_SYMBOL_H
 #define PARSER_GENERATOR_SYMBOL_H
 
-#include "string"
+#include <string>
+#include "parser.h"
 
 using std::string;
 
@@ -13,6 +14,7 @@ using std::string;
  * class representing general symbol (terminals and non terminals)
  */
 class symbol {
+private:
     friend class file_parser;
     friend  class grammar_validator;
 public:
@@ -25,8 +27,12 @@ public:
      * @return true iff the 2 symbols have the same name
      */
     virtual bool operator==(const symbol &);       // to compare symbols
-    string get_name();
+    string get_name() const ; //
+     friend class file_parser;
+    friend  class grammar_validator;
 
+    /* pure virtual function to serve the parser visitor class */
+    virtual void accept( parser *) const= 0;
 
 
 protected :
@@ -41,8 +47,8 @@ protected :
  */
 class token {
 public:
-    //const static token eps;// = token(string("epsilon"));
-
+    bool operator < (const token &) const;
+    bool operator ==(const token &) const ;
     /**
      * constructor taking token name
      * @param s token name (ex: "id","num",")")
@@ -51,12 +57,9 @@ public:
         name = s;
     }
 
-    bool operator < (const token &) const;
-    bool operator == (const token &) const;
     string name;
 };
 
-
-const static token eps("epsilon");
-
+const static  token eps(string("epsilon"));
+\
 #endif //PARSER_GENERATOR_SYMBOL_H

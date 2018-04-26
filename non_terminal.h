@@ -8,11 +8,12 @@
 #include "vector"
 #include "string"
 #include "symbol.h"
+#include <iostream>
+
 using std::vector;
 using std::string;
 
 class production;
-
 
 
 class non_terminal : public symbol {
@@ -27,12 +28,21 @@ public:
 
     void add_production(production);
 
-    vector<production> get_productions();
+    vector<production> get_productions() const ;
+
+    friend ostream &operator<<(ostream &os, non_terminal &p);
+
+    void accept( parser *) const override;
+
+protected:
+    friend class file_parser;
 
 private:
 
 
 #ifndef debug_mode
+
+    friend class grammar_validator;
 
     non_terminal(string);
 #endif
