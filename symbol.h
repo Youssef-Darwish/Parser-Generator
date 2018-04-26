@@ -16,11 +16,8 @@ using std::string;
 class symbol {
 private:
     friend class file_parser;
-    friend  class grammar_validator;
+    friend  class CFG_TO_LL1;
 public:
-#ifdef debug_mode
-    string symbol_name;
-#endif
 
     /**
      * class equating symbols

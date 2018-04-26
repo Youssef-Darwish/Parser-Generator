@@ -12,7 +12,7 @@ production::production(vector<const symbol*>sl){
 ostream& operator <<( ostream& os, const production & p) {
     os<<"("<<p.symbol_list.size()<<")";
     for(int i=0;i<p.symbol_list.size();i++) {
-        os<<p.symbol_list[i]->get_name() <<" ";
+        os<<p.symbol_list[i] <<"."<<p.symbol_list[i]->get_name() <<" ";
     }
     return os;
 }

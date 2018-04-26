@@ -37,12 +37,11 @@ public:
 protected:
     friend class file_parser;
 
-private:
 
 
 #ifndef debug_mode
 
-    friend class grammar_validator;
+    friend class CFG_TO_LL1;
 
     non_terminal(string);
 

@@ -37,6 +37,7 @@ public:
 production();
 production(vector<const symbol*>);
 friend ostream& operator <<(ostream& os,const  production & p);
+
 /**
  * operator equating 2 productins
  * @return true iff the 2 symbol sequences are identical
@@ -46,6 +47,7 @@ friend ostream& operator <<(ostream& os,const  production & p);
 private:
 #ifndef debug_mode
     vector<const symbol *> symbol_list;
+
 #endif
 
 };

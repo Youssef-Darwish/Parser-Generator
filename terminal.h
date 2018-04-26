@@ -28,6 +28,7 @@ private:
 
 protected:
     friend class file_parser;
+    friend  class CFG_TO_LL1;
     void accept( parser *) const override;
 public:
 

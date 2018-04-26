@@ -15,6 +15,7 @@
 #include "terminal.h"
 #include <vector>
 #include <map>
+#include <set>
 #include <string>
 
 #ifndef CFG_TO_LL1_H
@@ -22,18 +23,23 @@
 
 #define productions std::vector<std::vector<std::string>>
 #define grammar std::map <std::string,productions>
-const std::string epsilon_ ="epsilon"; // to be updated from terminal.h
-const std::string prime ="'";
 
+const std::string epsilon_ ="epsilon"; // to be updated from terminal.h
+const std::string prime_rec ="'", prime_fac = "^";
+class token;
 class CFG_TO_LL1 {
 public:
-    CFG_TO_LL1(std::vector <non_terminal> input);
+    CFG_TO_LL1(std::vector <const non_terminal * > input, std::vector<token> token_set);
     bool LL1_validator();
-    vector <non_terminal> get_LL1();
+    vector <const  non_terminal *> get_LL1();
     void print();
 
 private:
-    std::vector <non_terminal> input,output;
+    std::set<token> tokens;
+    std::map < std::string , non_terminal *> all_non_terminals;
+
+    std::map < std::string , terminal *> all_terminals;
+    std::vector <const non_terminal * > input,output;
     grammar CFG, LL1,original_CFG;
     std::map <int,grammar:: iterator> map_of_indices;
     bool eliminate_immediate_left_recursion(grammar::iterator i);
