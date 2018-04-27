@@ -26,6 +26,8 @@ struct file_parser_arg {
     string start_string;
     string equator;
     set<char> escape_set;
+    char enc1;
+    char enc2;
     string epsilon;
 };
 

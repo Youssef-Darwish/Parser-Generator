@@ -23,6 +23,7 @@ int main() {
     arg.escape_set.insert('\n');
     arg.escape_set.insert('\'');
     arg.start_string = "#";
+    arg.enc1 = arg.enc2 = '\'';
     arg.equator = "=";
     file_parser fp = file_parser(arg);
     ifstream ifile("../grammar.txt");
@@ -45,6 +46,8 @@ int main() {
     for(int i=0;i<vec.size();i++) {
         cout<<vec[i] <<" "<<(*vec[i]);
     }
+    cout<<endl;
+    return  0;
     vector <token> vt = fp.get_token_set();
 
     CFG_TO_LL1 convertor(vec,vt);

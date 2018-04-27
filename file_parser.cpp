@@ -53,14 +53,27 @@ string copy_ind(const char* str,substring sub,set<char> &escape) {
     temp[i+1] = 0;
     return  string(temp);
 }
-vector<int> occu(int lps[], const string &delim, const char str[], int n) {
+vector<int> occu(int lps[], const string &delim, const char str[], int n,char e1,char e2) {
     int i = 0, j = 0;
     vector<int> occs;
-    char temp[256];
-    strncpy(temp, str, n);
+   // char temp[256*256];
+   // strncpy(temp, str, n);
+    //temp[n] = 0;
     if (delim.size() > n)
         return occs;
+    bool es = 0;
     while (i < n) {
+        if(str[i] == e1 && !es) {
+            es = 1;
+            j = 0;
+
+        }
+        else if(str[i] == e2 && es)
+            es =0;
+        if(es) {
+            i++;
+            continue;
+        }
         if (str[i] == delim[j])
             i++, j++;
         else if (j == 0)
@@ -87,16 +100,16 @@ vector<substring> split_string(const set<char> &delims,const char str[],int n) {
         rets.push_back({lst,n-lst});
     return  rets;
 }
-vector<substring> split_string(const string &delim, const char str[], int n) {
+vector<substring> split_string(const string &delim, const char str[], int n,char escape1 ,char escape2) {
     int lps[256];
     create_lps(delim, lps);
     int del_size = delim.size();
-    vector<int> seps = occu(lps, delim, str, n);
+    vector<int> seps = occu(lps, delim, str, n,escape1,escape2);
     vector<substring> rets;
     int cur, sz, lst = 0;
     for (int i = 0; i < seps.size(); i++) {
         cur = seps[i];
-        if(cur > 0 && str[cur-1] =='\\')
+       if(cur > 0 && str[cur-1] =='\\')
             continue;
         sz = cur - lst;
         if (sz)
@@ -152,14 +165,15 @@ bool file_parser::parse_productions(pair<string,substring> prod) {
 bool file_parser::parse(const string &c) {
     input = c.c_str();
     input_size = strlen(input);
-    vector<substring> productions = split_string(args.start_string, input, input_size);
+    vector<substring> productions = split_string(args.start_string, input, input_size,args.enc1,args.enc2);
     vector < pair< string , substring > > production_list;
     for (int i = 0 ;i < productions.size();i++) {
         //cout<< copy_ind(input,productions[i],args.escape_set)<<" done that from "<<productions[i].ind <<" "<<
           //  productions[i].siz << endl;
         int base  = productions[i].ind;
+        const char * view = input + base;
         vector<substring> sides;
-        sides = split_string(args.equator,input+base,productions[i].siz);
+        sides = split_string(args.equator,input+base,productions[i].siz,args.enc1,args.enc2);
         if(sides.size() !=2) {
 
             error_val = INVALID_STATEMENT;
