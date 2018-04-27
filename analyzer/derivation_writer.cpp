@@ -25,18 +25,18 @@ void derivation_writer::clear_epsilon() {
     print_derivation();
 }
 
-void derivation_writer::match(token token) {
+void derivation_writer::match(token cur_token) {
     processed.push_back(non_processed.back()->get_name());
     non_processed.pop_back();
-    derivation_file << "-- Matching '" << token.name << "'...\n";
+    derivation_file << "-- Matching '" << cur_token.name << "'...\n";
 }
 
 void derivation_writer::insert_unmatched(token token) {
     derivation_file << "** ERROR: Unmatched token '" << token.name << "' inserted...\n";
 }
 
-void derivation_writer::discard_illegal(const non_terminal *top_non_terminal, token token) {
-    derivation_file << "** ERROR: Illegal '" << top_non_terminal->get_name() << "' - Discard '" << token.name << "'...\n";
+void derivation_writer::discard_illegal(const non_terminal *top_non_terminal, token cur_token) {
+    derivation_file << "** ERROR: Illegal '" << top_non_terminal->get_name() << "' - Discard '" << cur_token.name << "'...\n";
 }
 
 void derivation_writer::terminate(exit_status status) {
