@@ -270,10 +270,6 @@ bool CFG_TO_LL1::LL1_validator() {
     
         from_input_to_CFG();
         eliminate_left_recursion();
-        print();
         left_factor();
-        //
-     print();
-     std::cout<<std::endl;
         return (CFG==LL1);
 }
