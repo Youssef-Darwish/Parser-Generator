@@ -1,13 +1,13 @@
-//
-// Created by Lenovo on 4/19/2018.
-//
-
 #ifndef PARSER_GENERATOR_TERMINAL_H
 #define PARSER_GENERATOR_TERMINAL_H
+
 #include "symbol.h"
+
 class parser;
+
 class file_parser;
-class terminal :public  symbol {
+
+class terminal : public symbol {
 public:
 #ifdef debug_mode
 
@@ -28,14 +28,17 @@ private:
 
 protected:
     friend class file_parser;
-    friend  class CFG_TO_LL1;
-    void accept( parser *) const override;
+
+    friend class CFG_TO_LL1;
+
+    void accept(parser *) const override;
+
 public:
 
-    token get_token()const;
+    token get_token() const;
 
-    static const  terminal epsilon;
-      static const terminal end_terminal;
+    static const terminal epsilon;
+    static const terminal end_terminal;
 };
 
 #endif //PARSER_GENERATOR_TERMINAL_H

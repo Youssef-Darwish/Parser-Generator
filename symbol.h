@@ -6,10 +6,10 @@
 #define PARSER_GENERATOR_SYMBOL_H
 
 #include <string>
-#include "parser.h"
 
 using std::string;
 
+class parser;
 /**
  * class representing general symbol (terminals and non terminals)
  */

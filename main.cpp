@@ -15,6 +15,7 @@
 #include "CFG_to_LL1.h"
 using  namespace std;
 int main() {
+
     cout <<"start" <<endl;
     file_parser_arg arg;
     arg.epsilon = "\\L";
@@ -66,5 +67,7 @@ int main() {
 //    cout<<*pt<<endl;
 //    cout <<"end"<<endl;
 //
+
+
       return 0;
 }

@@ -13,6 +13,7 @@
 using std::vector;
 using std::string;
 using std::ostream;
+
 class production;
 
 
@@ -28,15 +29,14 @@ public:
 
     void add_production(production);
 
-    vector<production> get_productions() const ;
+    vector<production> get_productions() const;
 
     friend ostream &operator<<(ostream &os, const non_terminal &p);
 
-    void accept( parser *) const override;
+    void accept(parser *) const override;
 
 protected:
     friend class file_parser;
-
 
 
 #ifndef debug_mode

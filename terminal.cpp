@@ -6,6 +6,7 @@
 #include "production.h"
 #include "symbol.h"
 #include "terminal.h"
+#include "analyzer/parser.h"
 
 terminal::terminal(token t) :symbol(t.name) {
     terminal_name = t;

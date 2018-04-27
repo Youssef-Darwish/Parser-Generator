@@ -7,6 +7,7 @@
 #include "iostream"
 #include "symbol.h"
 #include "terminal.h"
+#include "analyzer/parser.h"
 
 void non_terminal::add_production(production prod) {
 
