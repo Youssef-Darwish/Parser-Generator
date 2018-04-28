@@ -2,6 +2,9 @@
 #include "../terminal.h"
 #include "../production.h"
 
+vector<string> tokens = {"int", "id", ";", "id", "assign", "num", ";", "if", "(", "id", "relop", "num", ")", "{", "id", "assign", "num", ";", "}", "$"};
+int cur = -1;
+
 parser::parser(predictive_table *table) {
     this->table = table;
     // TODO: this->lexical_analyzer = lexical_analyzer;
@@ -14,9 +17,13 @@ void parser::parse() {
     deriver.set_start((const symbol*) table->get_start());
 
     // TODO: if Analyzer->has_next(); i.e, src file is not empty, o.w: ERROR
-    *cur_token = token(""); // TODO: lexical_analyzer->next_token()
+    std::cout << "here\n";
+    *cur_token = token(tokens[++cur]); // TODO: lexical_analyzer->next_token()
+    std::cout << "here\n";
+
     while (!parser_stack.empty())
         parser_stack.top()->accept(this);
+
     if (error) // TODO: if Analyzer->has_next(); i.e; more tokens that could not be parsed
         deriver.terminate(exit_status::FAIL);
     else if (error)
@@ -33,7 +40,7 @@ void parser::process(const terminal *top) {
                 deriver.terminate(exit_status::SUCCESS);
         } else { // token match
             deriver.match(*cur_token);
-            *cur_token = token(""); // TODO: lexical_analyzer->next_token()
+            *cur_token = token(tokens[++cur]); // TODO: lexical_analyzer->next_token()
         }
     } else { // ERROR
         error = true;
@@ -60,7 +67,7 @@ void parser::process(const non_terminal *top) {
         case ERROR: {
             error = true;
             deriver.discard_illegal(top, *cur_token);
-            *cur_token = token(""); // TODO: lexical_analyzer->next_token()
+            *cur_token = token(tokens[++cur]); // TODO: lexical_analyzer->next_token()
         }
     }
 }

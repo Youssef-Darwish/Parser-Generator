@@ -21,12 +21,16 @@
 
 CFG_TO_LL1::CFG_TO_LL1(vector <const non_terminal*> input, std::vector<token> token_set) {
     this-> input = input;
-        tokens.insert(token_set.begin(),token_set.end());
+    tokens.insert(token_set.begin(),token_set.end());
+
 }
 
 void CFG_TO_LL1::from_input_to_CFG() {
+    if(input.size() < 1)
+        return;
+    start_symbol = input[0]->get_name();
     for (int i = 0; i < input.size(); i++) {
-        
+
         std::string non_terminal =input[i]->get_name();
         vector <production> prod_list =input[i]->get_productions();
         productions to_fill(prod_list.size());
@@ -46,14 +50,15 @@ void CFG_TO_LL1::from_input_to_CFG() {
 }
 vector <const non_terminal*> CFG_TO_LL1::get_LL1()
 {
+
     for (auto it=LL1.begin();it!=LL1.end();it++)
     {
         non_terminal *x;
         if(all_non_terminals.count(it->first))
             x  = all_non_terminals[it->first];
         else {
-          x  = new non_terminal(it->first);
-          all_non_terminals[it->first] = x;
+            x  = new non_terminal(it->first);
+            all_non_terminals[it->first] = x;
         }
         for (int i=0;i<it->second.size();i++)
         {
@@ -92,6 +97,14 @@ vector <const non_terminal*> CFG_TO_LL1::get_LL1()
         }
         output.push_back(x);
     }
+    for(int i=0;i<output.size();i++) {
+        if(output[i]->get_name() == start_symbol) {
+            const non_terminal * temp = output[i];
+            output[i] =  output[0];
+            output[0] = temp;
+            break;
+        }
+    }
     return output;
 }
 void CFG_TO_LL1::print_grammar (grammar g)
@@ -101,11 +114,11 @@ void CFG_TO_LL1::print_grammar (grammar g)
         std::cout <<it->first <<" -> ";
         for (int i=0;i<it->second.size();i++)
         {
-           for (int j=0;j<it->second[i].size();j++)
-           {
-               std::cout <<it->second[i][j];
-           }
-          if (i!=it->second.size()-1) std:: cout <<" | ";
+            for (int j=0;j<it->second[i].size();j++)
+            {
+                std::cout <<it->second[i][j];
+            }
+            if (i!=it->second.size()-1) std:: cout <<" | ";
         }
         std::cout <<std::endl;
     }
@@ -118,7 +131,7 @@ void  CFG_TO_LL1::print()
     print_grammar(LL1);
 }
 bool CFG_TO_LL1::eliminate_immediate_left_recursion(grammar::iterator i) {
-    
+
     std::string non_terminal = i->first, non_terminal_prime = non_terminal + prime_rec;
     productions non_terminal_productions = i->second;
     productions prime_productions;
@@ -132,7 +145,7 @@ bool CFG_TO_LL1::eliminate_immediate_left_recursion(grammar::iterator i) {
     }
     if (non_terminal_productions.size()==old_size)
     {
-       LL1.insert(make_pair(i->first,i->second));
+        LL1.insert(make_pair(i->first,i->second));
         return 0;
     }
     std::vector <std::string> empty(1);
@@ -144,22 +157,22 @@ bool CFG_TO_LL1::eliminate_immediate_left_recursion(grammar::iterator i) {
     LL1.insert(make_pair(non_terminal,non_terminal_productions));
     LL1.insert(make_pair(non_terminal_prime,prime_productions));
     return 1;
-    }
+}
 
 void CFG_TO_LL1::eliminate_left_recursion() {
     for (auto i = map_of_indices.begin(); i != map_of_indices.end(); i++) {
         for (auto j = map_of_indices.begin(); j != i; j++)
-               substitute(i->second, j->second);
+            substitute(i->second, j->second);
         eliminate_immediate_left_recursion(i->second);
-        }
+    }
 }
 
 void CFG_TO_LL1::substitute(grammar::iterator i, grammar::iterator j) {
-            productions productions_j = LL1.find(j->first)->second; // substitute with production from LL1
-            productions productions_i = i->second; // get production to be modified from CFG
-            productions modified, temp,to_fill(productions_j.size());
-            temp = productions_j;
-           
+    productions productions_j = LL1.find(j->first)->second; // substitute with production from LL1
+    productions productions_i = i->second; // get production to be modified from CFG
+    productions modified, temp,to_fill(productions_j.size());
+    temp = productions_j;
+
     for (int k = 0; k < productions_i.size(); k++) {
         modified.clear();
         temp = productions_j;
@@ -172,15 +185,15 @@ void CFG_TO_LL1::substitute(grammar::iterator i, grammar::iterator j) {
                 to_fill[m].insert(to_fill[m].end(), temp[m].begin(), temp[m].end());
                 to_fill[m].insert(to_fill[m].end(), productions_i[k].begin()+l, productions_i[k].end());
             }
-               
+
             replace(k, modified, to_fill, productions_i);
             i->second=modified;
-            
+
             if (!eliminate_immediate_left_recursion(i))
             {
                 i->second = original_CFG.find(i->first)->second;
                 LL1.erase(LL1.find(i->first));
-            } 
+            }
         }
     }
 }
@@ -190,20 +203,20 @@ void CFG_TO_LL1::replace(int k, productions & modified, productions productions_
     for (a = 0; a < k; a++)
         modified.push_back(productions_i[a]);
     for (a = 0; a < productions_j.size(); a++)
-       modified.push_back(productions_j[a]);
+        modified.push_back(productions_j[a]);
     for (a = k + 1; a < productions_i.size(); a++)
-         modified.push_back(productions_i[a]);
-            
+        modified.push_back(productions_i[a]);
+
 }
 void CFG_TO_LL1::left_factor() {
     grammar copy;
     do {
-    copy = clone();
-    for (grammar::iterator i = copy.begin(); i != copy.end(); i++) {
-        left_factor(i);
-        // print_grammar(LL1);
-    }
-}while(copy != LL1);
+        copy = clone();
+        for (grammar::iterator i = copy.begin(); i != copy.end(); i++) {
+            left_factor(i);
+            // print_grammar(LL1);
+        }
+    }while(copy != LL1);
 }
 
 void CFG_TO_LL1::left_factor(grammar::iterator it) {
@@ -212,7 +225,7 @@ void CFG_TO_LL1::left_factor(grammar::iterator it) {
     productions p= it->second,to_fill;
     std::vector<std::string> eps ;
     eps.push_back(epsilon_);
-    
+
     for (int i=0;i<p.size();i++)
     {
         to_fill.clear();
@@ -237,8 +250,8 @@ void CFG_TO_LL1::left_factor(grammar::iterator it) {
             itr->second.erase(itr->second.begin()+i);
         }
     }
-     std::vector<std::string> temp;
-     std::string non_terminal_prime="",primes="";
+    std::vector<std::string> temp;
+    std::string non_terminal_prime="",primes="";
     for (auto k=left_factored_symbols.begin();k!=left_factored_symbols.end();k++)
     {
         if (k->second.size()==1)continue;
@@ -257,19 +270,19 @@ void CFG_TO_LL1::left_factor(grammar::iterator it) {
         temp.push_back(non_terminal_prime);
         LL1.find(it->first)->second.push_back(temp);
         LL1[non_terminal_prime] = k->second;
-    } 
+    }
 }
 grammar CFG_TO_LL1::clone()
 {
     grammar copy;
-    for (grammar::iterator i = LL1.begin(); i != LL1.end(); i++) 
+    for (grammar::iterator i = LL1.begin(); i != LL1.end(); i++)
         copy.insert(make_pair(i->first,i->second));
     return copy;
 }
 bool CFG_TO_LL1::LL1_validator() {
-    
-        from_input_to_CFG();
-        eliminate_left_recursion();
-        left_factor();
-        return (CFG==LL1);
+
+    from_input_to_CFG();
+    eliminate_left_recursion();
+    left_factor();
+    return (CFG==LL1);
 }

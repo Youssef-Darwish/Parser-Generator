@@ -39,15 +39,15 @@ int main() {
     }
      cout <<all<<endl;
 
-    cout << "\n*******************\n";
+
 
     cout << fp.parse(all)<<endl;
     vector<const non_terminal*> vec = fp.get_grammar();
-    for(int i=0;i<vec.size();i++) {
+    /*for(int i=0;i<vec.size();i++) {
         cout<<vec[i] <<" "<<(*vec[i]);
-    }
+    }*/
     cout<<endl;
-    return  0;
+
     vector <token> vt = fp.get_token_set();
 
     CFG_TO_LL1 convertor(vec,vt);
@@ -61,20 +61,18 @@ int main() {
     cout<<endl;
     vt.push_back(end_token);
     cout<<"first follow \n";
-    first_follow_generator *generator = new first_follow_generator(vec);
+    first_follow_generator *generator = new first_follow_generator(LL1);
     generator->start_first_calculations();
     generator->start_follow_calculations();
     generator->print();
     first_follow_wrapper * wrap = generator->get_wrapper();
     cout<<*wrap<<endl;
-    predictive_table * pt = new predictive_table(vt,vec,*wrap);
+    predictive_table * pt = new predictive_table(vt,LL1,*wrap);
     cout<<*pt<<endl;
     cout <<"end"<<endl;
-
-
 
     parser p = parser(pt);
     p.parse();
 
-      return 0;
+    return 0;
 }
