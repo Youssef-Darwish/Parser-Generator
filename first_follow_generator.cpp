@@ -9,7 +9,7 @@
 #include "iostream"
 #include "wrapper.h"
 
-
+using namespace std;
 first_follow_generator::first_follow_generator(vector<const non_terminal *> non_ter) {
 
     non_terminals_received = non_ter;
@@ -35,22 +35,24 @@ void first_follow_generator::start_first_calculations() {
 
     for (int i = 0; i < non_terminals_received.size(); i++) {
 
-        if (first_set_map.count(non_terminals_received[i]) == 0) {
-            get_first(non_terminals_received[i]);
+        const non_terminal * temp = non_terminals_received[i];
+        if (first_set_map.count(temp) == 0) {
+            get_first(temp);
         }
-    }
-    for (auto f : first_set_map) {
-        for (auto g : *f.second) {
-            std::cout << g.name << "  ";
-        }
-        std::cout << std::endl;
     }
 }
 
 
-set<token> first_follow_generator::get_first(const symbol *sym) {
-    auto *current = dynamic_cast<const non_terminal *>(sym);
-    auto *first_set = new set<token>;
+void first_follow_generator::get_first(const non_terminal *sym) {
+    auto *current = sym;
+    cout<<"visiting "<<sym->get_name() <<endl;
+    if(visited_symbols.count(sym))
+    {
+        std::cout<<"PROBLEM"<<std::endl;
+
+    }
+    // visited_symbols.insert(sym);
+    auto *first_set = new set<token> ();
     for (int i = 0; i < current->get_productions().size(); i++) {
         const symbol *next = current->get_productions()[i].get_symbol(0);
         if (is_terminal(next)) {
@@ -63,13 +65,13 @@ set<token> first_follow_generator::get_first(const symbol *sym) {
 
         else {
 
-            set<token> temp = get_first((non_terminal *) next);
+            get_first((non_terminal *) next);
+            set<token> temp = *first_set_map[next];
             if (temp.count(eps) == 0) {
                 first_set->insert(temp.begin(), temp.end());
             }
 
             else {
-                bool insert_epsilon = false;
                 bool has_epsilon = true;
                 first_set->insert(temp.begin(), temp.end());
                 for (int j = 1; j < current->get_productions()[i].get_symbol_list_size()
@@ -80,21 +82,20 @@ set<token> first_follow_generator::get_first(const symbol *sym) {
                         has_epsilon = next_sym->get_name() == "epsilon";  //TODO make it more clean
                         first_set->insert(next_sym->get_name());
                     } else {
-                        set<token> inner = get_first((non_terminal *) next_sym);
+                        get_first((non_terminal *) next_sym);
+                        set<token> inner = *first_set_map[next_sym];
                         first_set->insert(inner.begin(), inner.end());
                         if (inner.count(token("epsilon")) == 0) {
                             has_epsilon = false;
-                            if (j == current->get_productions()[i].get_symbol_list_size() - 1) {
-                                insert_epsilon = true;
-                            }
+
                         }
                     }
                 }
             }
         }
     }
+    cout <<"Returning from "<<sym->get_name() <<endl;
     first_set_map[sym] = first_set;
-    return *first_set;
 
 }
 

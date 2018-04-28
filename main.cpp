@@ -49,7 +49,7 @@ int main() {
     cout<<endl;
 
     vector <token> vt = fp.get_token_set();
-
+    vt.push_back(token("epsilon"));
     CFG_TO_LL1 convertor(vec,vt);
     cout << convertor.LL1_validator()<<endl;
     vector<const  non_terminal * > LL1 = convertor.get_LL1();
@@ -72,7 +72,8 @@ int main() {
     cout <<"end"<<endl;
 
     parser p = parser(pt);
+    freopen("../out/derivation.txt","w",stdout);
     p.parse();
-
+    cout<<endl;
     return 0;
 }

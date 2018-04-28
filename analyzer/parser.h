@@ -27,7 +27,7 @@ public:
     void process(const non_terminal *top);
 
 private:
-    token *cur_token;
+    token cur_token;
     stack<const symbol *> parser_stack;
     predictive_table *table;
     // Analyzer *lexical_analyzer;

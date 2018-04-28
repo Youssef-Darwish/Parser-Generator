@@ -49,7 +49,7 @@ private:
     map<const symbol *, set<token> *> follow_set_map;
 #endif
 
-    set<token> get_first(const symbol *);
+   void get_first(const non_terminal *);
     void init();
     bool *visited;
     void  add_in_follow(const non_terminal *, set<token > *);

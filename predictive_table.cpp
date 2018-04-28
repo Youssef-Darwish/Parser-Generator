@@ -48,7 +48,7 @@ void predictive_table::construct() {
                 vector < production> allps = construction_set[i]->get_productions();
                 for(int k = 0; k < allps.size() && v <0;k++) {
                     const symbol *ofst = allps[k].get_symbol_list().at(0);
-                    if (ofst == &terminal::epsilon)
+                    if (ofst->get_name() == terminal::epsilon.get_name()) //fix that
                         v = k;
                 }
             }

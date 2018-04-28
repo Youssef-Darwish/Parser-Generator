@@ -8,7 +8,7 @@
 
 using std::vector;
 using std::string;
-using std::fstream;
+using std::ofstream;
 
 class token;
 
@@ -42,7 +42,7 @@ public:
 
 private:
     const string DERIVATION_PATH = "../out/derivation.txt";
-    fstream derivation_file;
+    ofstream derivation_file;
     vector<string> processed;
     vector<const symbol *> non_processed;
 
